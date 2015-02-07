@@ -10,6 +10,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+/**
+ * 
+ * @author alt
+ *
+ */
 public class DatabaseConnection {
 
 	/**
@@ -35,9 +40,7 @@ public class DatabaseConnection {
 
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			// CompanyCloudLogging.logError(Level.SEVERE, e.getMessage());
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -59,7 +62,6 @@ public class DatabaseConnection {
 				connection.close();
 			}
 		} catch (SQLException e) {
-			// CompanyCloudLogging.logError(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -77,7 +79,6 @@ public class DatabaseConnection {
 				statement.close();
 			}
 		} catch (SQLException e) {
-			// CompanyCloudLogging.logError(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -95,7 +96,6 @@ public class DatabaseConnection {
 				result.close();
 			}
 		} catch (SQLException e) {
-			// CompanyCloudLogging.logError(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -112,7 +112,6 @@ public class DatabaseConnection {
 				connection.rollback();
 			}
 		} catch (SQLException e) {
-			// CompanyCloudLogging.logError(Level.SEVERE, e.getMessage());
 		}
 	}
 

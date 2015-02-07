@@ -12,6 +12,12 @@ import com.prometheus.core.exception.ConfigurationException;
  */
 public interface DatabaseAdapter {
 
-	public ContextResource createResource(Configuration configuration) throws ConfigurationException;
+	/**
+	 * 
+	 * @param configuration
+	 * @return
+	 * @throws ConfigurationException
+	 */
+	public ContextResource createResource(Configuration settings) throws ConfigurationException;
 
 }

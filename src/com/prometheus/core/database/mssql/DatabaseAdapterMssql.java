@@ -1,4 +1,4 @@
-package com.prometheus.core.database.mysql;
+package com.prometheus.core.database.mssql;
 
 import org.apache.tomcat.util.descriptor.web.ContextResource;
 
@@ -11,7 +11,7 @@ import com.prometheus.core.exception.ConfigurationException;
  * @author alt
  *
  */
-public class DatabaseAdapterMysql implements DatabaseAdapter {
+public class DatabaseAdapterMssql implements DatabaseAdapter {
 
 	@Override
 	public ContextResource createResource(Configuration settings) throws ConfigurationException {
@@ -19,7 +19,7 @@ public class DatabaseAdapterMysql implements DatabaseAdapter {
 		String name = "default";
 		String type = "javax.sql.DataSource";
 		String auth = "Container";
-		String driverClassName = "com.mysql.jdbc.Driver";
+		String driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 		String hostname = "localhost";
 		String port = "3306";
 		String username = null;
@@ -79,6 +79,14 @@ public class DatabaseAdapterMysql implements DatabaseAdapter {
 			minIdle = settings.get("server.database.minIdle");
 		}
 
+		if ((settings.get("server.database.initialSize") != null) && (!settings.get("server.database.initialSize").equals(""))) {
+			initialSize = settings.get("server.database.initialSize");
+		}
+
+		if ((settings.get("server.database.minIdle") != null) && (!settings.get("server.database.minIdle").equals(""))) {
+			minIdle = settings.get("server.database.minIdle");
+		}
+
 		ContextResource resource = new ContextResource();
 		resource.setName(name);
 		resource.setType(type);
@@ -88,7 +96,7 @@ public class DatabaseAdapterMysql implements DatabaseAdapter {
 		resource.setProperty("password", password);
 		resource.setProperty("driverClassName", driverClassName);
 
-		resource.setProperty("url", "jdbc:mysql://" + hostname + ":" + port + "/" + database + "?characterEncoding=" + encoding);
+		resource.setProperty("url", "jdbc:sqlserver://" + hostname + ":" + port + ";databaseName=" + database + ";user=" + username + ";password=" + password + ";CharacterSet=" + encoding);
 		resource.setProperty("maxActive", maxActive);
 		resource.setProperty("maxIdle", maxIdle);
 		resource.setProperty("maxWait", maxWait);
