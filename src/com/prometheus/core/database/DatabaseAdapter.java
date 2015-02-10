@@ -14,7 +14,7 @@ public interface DatabaseAdapter {
 
 	/**
 	 * 
-	 * @param configuration
+	 * @param settings
 	 * @return
 	 * @throws ConfigurationException
 	 */

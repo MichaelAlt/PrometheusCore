@@ -30,6 +30,13 @@ public class Configuration {
 
 	/**
 	 * 
+	 */
+	protected void clear() {
+		properties.clear();
+	}
+	
+	/**
+	 * 
 	 * @param key
 	 * @return
 	 */

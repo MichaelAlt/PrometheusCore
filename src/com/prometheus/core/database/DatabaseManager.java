@@ -27,8 +27,10 @@ public class DatabaseManager {
 
 		if (ConfigurationContext.get("server.database.type").equals("mysql")) {
 			adapter = new DatabaseAdapterMysql();
+			DatabaseConnection.loadStatementStrings("mysql");
 		} else if (ConfigurationContext.get("server.database.type").equals("mssql")) {
 			adapter = new DatabaseAdapterMssql();
+			DatabaseConnection.loadStatementStrings("mssql");
 		}
 
 		context.getNamingResources().addResource(adapter.createResource(ConfigurationContext.getConfiguration()));

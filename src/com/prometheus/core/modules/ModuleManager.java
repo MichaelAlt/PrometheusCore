@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.prometheus.core.exception.ConfigurationException;
 import com.prometheus.core.modules.annotations.ModuleName;
 import com.prometheus.core.modules.annotations.ModuleType;
 import com.prometheus.core.modules.annotations.ModuleVersion;
@@ -28,8 +29,9 @@ public class ModuleManager {
 	 * 
 	 * @throws IOException
 	 * @throws ClassNotFoundException
+	 * @throws ConfigurationException
 	 */
-	public ModuleManager() throws IOException, ClassNotFoundException {
+	public ModuleManager() throws IOException, ClassNotFoundException, ConfigurationException {
 
 		moduleConfigurations = new ArrayList<ModuleConfiguration>();
 
@@ -43,7 +45,9 @@ public class ModuleManager {
 	 */
 	private void loadLibraries() throws IOException {
 
+		System.out.println("Libraries loaded on startup:");
 		File directory = new File(System.getProperty("user.dir") + "/lib/");
+
 		for (File library : directory.listFiles()) {
 
 			if (library.getName().endsWith(".jar")) {
@@ -56,8 +60,9 @@ public class ModuleManager {
 	 * 
 	 * @throws IOException
 	 * @throws ClassNotFoundException
+	 * @throws ConfigurationException
 	 */
-	private void loadModules() throws IOException, ClassNotFoundException {
+	private void loadModules() throws IOException, ClassNotFoundException, ConfigurationException {
 
 		System.out.println("Modules loaded on startup:");
 		File directory = new File(System.getProperty("user.dir") + "/modules/");
@@ -65,6 +70,7 @@ public class ModuleManager {
 		for (File module : directory.listFiles()) {
 
 			if (module.getName().endsWith(".jar")) {
+				loadBinary(module);
 				loadConfiguration(module);
 			}
 		}
@@ -97,25 +103,12 @@ public class ModuleManager {
 
 	/**
 	 * 
-	 * @param path
+	 * @param file
 	 * @throws IOException
 	 * @throws ClassNotFoundException
+	 * @throws ConfigurationException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void loadConfiguration(File file) throws IOException, ClassNotFoundException {
-
-		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-		Class sysclass = URLClassLoader.class;
-
-		try {
-
-			Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
-			method.setAccessible(true);
-			method.invoke(sysloader, new Object[] { file.toURI().toURL() });
-		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new IOException("Error, could not add URL to system classloader");
-		}
+	private void loadConfiguration(File file) throws IOException, ClassNotFoundException, ConfigurationException {
 
 		JarFile jarFile = new JarFile(file);
 		Enumeration<JarEntry> entries = jarFile.entries();
@@ -126,7 +119,7 @@ public class ModuleManager {
 			if (entry.getName().endsWith(".class")) {
 
 				String moduleClass = entry.getName().replace("/", ".").replace(".class", "");
-				Class configuration = ClassLoader.getSystemClassLoader().loadClass(moduleClass);
+				Class<?> configuration = ClassLoader.getSystemClassLoader().loadClass(moduleClass);
 
 				if (configuration.isAnnotationPresent(ModuleName.class)) {
 
@@ -143,7 +136,7 @@ public class ModuleManager {
 					for (ModuleConfiguration module : moduleConfigurations) {
 
 						if (module.getModuleName().equals(moduleName.value())) {
-
+							throw new ConfigurationException("Module already loaded: " + moduleName.value());
 						}
 					}
 

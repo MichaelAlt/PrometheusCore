@@ -86,6 +86,9 @@ public class ConfigurationContext {
 	 */
 	public static void loadConfiguration() throws ConfigurationException {
 
+		// TODO Remove only database sensetive settings
+		// applicationConfiguration.clear();
+
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet result = null;
@@ -108,7 +111,6 @@ public class ConfigurationContext {
 			DatabaseConnection.close(statement);
 			DatabaseConnection.close(connection);
 		}
-
 	}
 
 	/**
