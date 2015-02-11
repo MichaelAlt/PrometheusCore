@@ -1,4 +1,4 @@
-package com.prometheus.core.identity.base;
+package com.prometheus.core.base.identities;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
