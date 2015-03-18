@@ -101,7 +101,7 @@ public class ConfigurationContext {
 			result = statement.executeQuery();
 
 			while (result.next()) {
-				applicationConfiguration.put(result.getString("entry_name"), result.getString("entry_value"));
+				applicationConfiguration.put(result.getString("configuration_name"), result.getString("configuration_value"));
 			}
 
 		} catch (SQLException e) {

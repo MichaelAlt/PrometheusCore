@@ -11,16 +11,20 @@ import java.util.HashMap;
 public class Identity {
 
 	protected String key;
+	protected String unique;
 	protected Timestamp created;
 	protected Timestamp changed;
 
-	protected HashMap<String, Object> attributes;
+	protected HashMap<String, String> attributes;
+	protected IdentityManagement identityManagement;
 
 	/**
 	 * 
 	 */
-	public Identity() {
-		this.attributes = new HashMap<String, Object>();
+	protected Identity(IdentityManagement identityManagement) {
+
+		this.attributes = new HashMap<String, String>();
+		this.identityManagement = identityManagement;
 	}
 
 	/**
@@ -29,6 +33,14 @@ public class Identity {
 	 */
 	public String getKey() {
 		return this.key;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getUnique() {
+		return this.unique;
 	}
 
 	/**
@@ -46,14 +58,33 @@ public class Identity {
 	public Timestamp getChange() {
 		return this.changed;
 	}
-	
+
 	/**
 	 * 
 	 * @param name
 	 * @return
 	 */
-	public Object getAttribute(String name) {
-		return this.attributes.get(name);
+	public String getAttribute(String name) {
+		return this.attributes.get(name.toLowerCase());
+	}
+
+	/**
+	 * 
+	 * @param name
+	 * @param value
+	 */
+	public void changeAttribute(String name, String value) {
+
+		this.identityManagement.changeAttribute(this, name, value);
+	}
+
+	/**
+	 * 
+	 * @param attributes
+	 */
+	public void ChangeAttributes(HashMap<String, String> attributes) {
+
+		this.identityManagement.changeAttributes(this, attributes);
 	}
 
 }

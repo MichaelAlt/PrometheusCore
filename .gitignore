@@ -1,5 +1,6 @@
 # Folders
 bin/
+.settings/
 
 # Files
 .classpath
